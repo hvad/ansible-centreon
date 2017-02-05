@@ -26,8 +26,8 @@ The stack can be deployed using the following command:
 
         ansible-playbook -i hosts site.yml
 
-Please note that the administrator account of Mariadb has no password. 
-You must secure the installation of Mariadb.
-SELinux is disabled for Centreon to work.
-The firewall is disabled.
+Please note that the administrator account of Mariadb has no password.  
+You must secure the installation of Mariadb.  
+SELinux is disabled for Centreon to work.  
+The firewall is disabled.  
 You need to connect with a browser to the http: // url_centre_address> to finalize the installation.
