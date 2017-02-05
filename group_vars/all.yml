@@ -1,0 +1,7 @@
+---
+## NTP Server
+ntp1_server: ntp1.example.com
+ntp2_server: ntp2.example.com
+
+## SNMP Community
+snmp_community: community 

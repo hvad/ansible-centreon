@@ -1,0 +1,9 @@
+[central]
+central
+
+[poller]
+poller1
+poller2
+
+[dbserver]
+db

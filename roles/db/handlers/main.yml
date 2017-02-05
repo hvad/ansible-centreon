@@ -1,0 +1,5 @@
+---
+# Handler to handle DB tier notifications
+
+- name: restart MariaDB
+  service: name=mysql state=restarted

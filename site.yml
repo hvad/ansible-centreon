@@ -1,0 +1,26 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: Central
+  hosts: central
+  remote_user: root
+
+  roles:
+    - common
+    - central
+
+- name: Poller
+  hosts: poller
+  remote_user: root
+
+  roles:
+    - common
+    - poller
+
+- name: Db
+  hosts: dbserver
+  remote_user: root
+
+  roles:
+    - common
+    - db

@@ -1,0 +1,8 @@
+---
+# This playbook contains plays that will be run on Poller nodes.
+
+- name: Install Poller
+  yum: name={{ item }} state=installed
+  with_items:
+    - centreon-poller-centreon-engine
+    - centreon-plugins
