@@ -30,4 +30,4 @@ Please note that the administrator account of Mariadb has no password.
 You must secure the installation of Mariadb.  
 SELinux is disabled for Centreon to work.  
 The firewall is disabled.  
-You need to connect with a browser to the http://<ip_address_centreon_web> to finalize the installation.
+You need to connect with a browser to the http://ip_address_centreon_web to finalize the installation.
