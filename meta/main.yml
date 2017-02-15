@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: David Hannequin
+  description: Ansible playbook to install Centreon version 2.8.x.
+  license: GPLv3
+  min_ansible_version: 2.2
+  platforms:
+  - name: EL
+    versions:
+    - 6
+  galaxy_tags:
+    - centreon
+    - installer
+    - monitoring
