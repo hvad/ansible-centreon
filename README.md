@@ -5,12 +5,12 @@
 - Requires Ansible 2.2 or newer
 - Expects CentOS/RHEL 6.x hosts
 
-These playbooks were tested on CentOS 6.x so we recommend
-that you use CentOS or RHEL to test these modules.
+These playbooks were tested on CentOS 6.x so we suggest CentOs or RHEL 
+systems usage for module testing.
 
 These playbooks can deploy a simple all-in-one Centreon server or a distributed 
-infrastructure with on Central, many Pollers and a dedicated Db server. The 
-inventory file 'hosts' defines the nodes in which the stacks should be configured.
+infrastructure with one Central, many Pollers and a dedicated Db server.  
+Inventory file 'hosts' defines nodes in which the stacks have to be configured.
 
         [central]
         central
@@ -26,8 +26,8 @@ The stack can be deployed using the following command:
 
         ansible-playbook -i hosts site.yml
 
-Please note that the administrator account of Mariadb has no password by default.  
+Please note the administrator account of Mariadb has no default password
 You must secure the installation of Mariadb.  
-SELinux is disabled for Centreon to work.  
-The firewall is disabled.  
-You need to connect with a browser to the http://ip_address_centreon_web to finalize the installation.
+SELinux and Firewall have to be disable for a ready-to-work Centreon setup.  
+
+You need to connect to this URL http://ip_address_centreon_web in order to achieve setup.
