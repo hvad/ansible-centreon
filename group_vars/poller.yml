@@ -1,0 +1,3 @@
+---
+## SNMP Community
+snmp_community: community 

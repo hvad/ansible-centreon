@@ -32,7 +32,7 @@
     - ansible_distribution_major_version == "6"
 
 - name: Install chrony for CentOS 7
-  yum: name=chronyd state=present
+  yum: name=chrony state=present
   when:
     - ansible_distribution == "CentOS"
     - ansible_distribution_major_version == "7"
@@ -67,7 +67,7 @@
     - ansible_distribution_major_version == "6"
 
 - name: Set Centreon repository for CentOS 7
-  template: src=centreon.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+  template: src=centreon-centos7.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
   when:
     - ansible_distribution == "CentOS"
     - ansible_distribution_major_version == "7"
@@ -79,7 +79,7 @@
     - ansible_distribution_major_version == "6"
 
 - name: Import CES GPG key for CentOS 7
-  template: src=RPM-GPG-KEY-CES dest=/etc/pki/rpm-gpg/ owner=root group=root mode=0644
+  template: src=RPM-GPG-KEY-CES-Centos7 dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
   when:
     - ansible_distribution == "CentOS"
     - ansible_distribution_major_version == "7"
