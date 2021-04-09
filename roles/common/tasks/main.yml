@@ -39,12 +39,24 @@
 - name: Ensure that snmpd is running
   service: name=snmpd state=started enabled=yes
 
-- name: Set Centreon repository
-  template: src=centreon.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
+# - name: Enable CodeReady Builder repository on RHEL
+# action: command subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms
+# when:
+# - ansible_distribution == "RedHat"
+
+- name: Enable PowerTools repository on CentOS
+  action: command dnf config-manager --set-enabled PowerTools
+  when:
+    - ansible_distribution == "CentOS"
+
+- name: Enable EPEL repository on RHEL/CentOS
+  yum: name={{ item }} state=installed
+  with_items:
+    - epel-release
   when:
     - ansible_os_family == "RedHat"
 
-- name: Import CES GPG key
-  template: src=RPM-GPG-KEY-CES dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
+- name: Set Centreon repository
+  yum: name="http://yum.centreon.com/standard/20.10/el8/stable/noarch/RPMS/centreon-release-20.10-2.el8.noarch.rpm" state=installed
   when:
     - ansible_os_family == "RedHat"
