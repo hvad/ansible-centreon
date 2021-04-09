@@ -13,41 +13,20 @@
 - name: ensure SELinux is turned off
   action: command /usr/sbin/setenforce 0
 
-- name: Disable iptables for CentOS 6
-  action: service name=iptables state=stopped enabled=false
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Disable firewalld for CentOS 7
+- name: Disable firewalld
   action: service name=firewalld state=stopped enabled=false
   when:
     - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
 
-- name: Install ntp for CentOS 6
-  yum: name=ntp state=present
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Install chrony for CentOS 7
+- name: Install chrony
   yum: name=chrony state=present
   when:
     - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
 
-- name: Ensure that ntpd is running for CentOS 6
-  service: name=ntpd state=started enabled=yes
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Ensure that ntpd is running for CentOS 7
+- name: Ensure that ntpd is running
   service: name=chronyd state=started enabled=yes
   when:
     - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
 
 - name: Install snmpd
   yum: name=net-snmp state=present
@@ -60,26 +39,12 @@
 - name: Ensure that snmpd is running
   service: name=snmpd state=started enabled=yes
 
-- name: Set Centreon repository for CentOS 6
-  template: src=centreon-centos6.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
+- name: Set Centreon repository
+  template: src=centreon.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
   when:
     - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
 
-- name: Set Centreon repository for CentOS 7
-  template: src=centreon-centos7.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
+- name: Import CES GPG key
+  template: src=RPM-GPG-KEY-CES dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
   when:
     - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
-
-- name: Import CES GPG key for CentOS 6
-  template: src=RPM-GPG-KEY-CES-Centos6 dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Import CES GPG key for CentOS 7
-  template: src=RPM-GPG-KEY-CES-Centos7 dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
