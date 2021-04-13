@@ -46,7 +46,7 @@
 # - ansible_distribution == "RedHat"
 
 - name: Enable PowerTools repository on CentOS
-  action: command dnf config-manager --set-enabled PowerTools
+  action: command dnf config-manager --set-enabled powertools
   when:
     - ansible_distribution == "CentOS"
 
