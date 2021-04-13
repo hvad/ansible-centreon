@@ -1,6 +1,6 @@
 # ansible-centreon
 
-##Centreon version 2.8.x Infrastructure (Central - Poller - Db Server) deployment
+## Centreon Infrastructure (Central - Poller - Db Server) deployment
 
 - Requires Ansible 2.9 or newer
 - Expects CentOS/RHEL 8.x hosts
