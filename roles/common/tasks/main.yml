@@ -58,6 +58,6 @@
     - ansible_os_family == "RedHat"
 
 - name: Set Centreon repository
-  yum: name="http://yum.centreon.com/standard/20.10/el8/stable/noarch/RPMS/centreon-release-20.10-2.el8.noarch.rpm" state=installed
+  yum: name="http://yum.centreon.com/standard/{{ centreon_major_version }}/el{{ ansible_distribution_major_version }}/stable/noarch/RPMS/centreon-release-{{ centreon_major_version }}-2.el{{ ansible_distribution_major_version }}.noarch.rpm" state=installed disable_gpg_check=yes
   when:
     - ansible_os_family == "RedHat"
