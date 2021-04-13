@@ -1,3 +1,5 @@
 ---
 ## SNMP Community
 snmp_community: community 
+
+centreon_major_version: "20.10"

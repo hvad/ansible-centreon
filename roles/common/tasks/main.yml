@@ -1,11 +1,12 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
+# We need python3-libselinux for the selinux module and libselinux-utils for /usr/sbin/setenforce
 - name: Install Selinux Management
   yum: name={{ item }} state=installed
   with_items:
-    - libselinux-python
-    - libsemanage-python
+    - python3-libselinux
+    - libselinux-utils
 
 - name: set SELinux to permissive
   action: selinux policy=targeted state=permissive
@@ -13,41 +14,20 @@
 - name: ensure SELinux is turned off
   action: command /usr/sbin/setenforce 0
 
-- name: Disable iptables for CentOS 6
-  action: service name=iptables state=stopped enabled=false
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Disable firewalld for CentOS 7
+- name: Disable firewalld
   action: service name=firewalld state=stopped enabled=false
   when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
+    - ansible_os_family == "RedHat"
 
-- name: Install ntp for CentOS 6
-  yum: name=ntp state=present
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Install chrony for CentOS 7
+- name: Install chrony
   yum: name=chrony state=present
   when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
+    - ansible_os_family == "RedHat"
 
-- name: Ensure that ntpd is running for CentOS 6
-  service: name=ntpd state=started enabled=yes
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
-
-- name: Ensure that ntpd is running for CentOS 7
+- name: Ensure that ntpd is running
   service: name=chronyd state=started enabled=yes
   when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
+    - ansible_os_family == "RedHat"
 
 - name: Install snmpd
   yum: name=net-snmp state=present
@@ -60,26 +40,24 @@
 - name: Ensure that snmpd is running
   service: name=snmpd state=started enabled=yes
 
-- name: Set Centreon repository for CentOS 6
-  template: src=centreon-centos6.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
+# - name: Enable CodeReady Builder repository on RHEL
+# action: command subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms
+# when:
+# - ansible_distribution == "RedHat"
 
-- name: Set Centreon repository for CentOS 7
-  template: src=centreon-centos7.repo dest=/etc/yum.repos.d/centreon.repo owner=root group=root mode=0644
+- name: Enable PowerTools repository on CentOS
+  action: command dnf config-manager --set-enabled powertools
   when:
     - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
 
-- name: Import CES GPG key for CentOS 6
-  template: src=RPM-GPG-KEY-CES-Centos6 dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
+- name: Enable EPEL repository on RHEL/CentOS
+  yum: name={{ item }} state=installed
+  with_items:
+    - epel-release
   when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "6"
+    - ansible_os_family == "RedHat"
 
-- name: Import CES GPG key for CentOS 7
-  template: src=RPM-GPG-KEY-CES-Centos7 dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-CES owner=root group=root mode=0644
+- name: Set Centreon repository
+  yum: name="http://yum.centreon.com/standard/{{ centreon_major_version }}/el{{ ansible_distribution_major_version }}/stable/noarch/RPMS/centreon-release-{{ centreon_major_version }}-2.el{{ ansible_distribution_major_version }}.noarch.rpm" state=installed disable_gpg_check=yes
   when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
+    - ansible_os_family == "RedHat"
