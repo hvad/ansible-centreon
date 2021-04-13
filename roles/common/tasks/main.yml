@@ -1,11 +1,12 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
+# We need python3-libselinux for the selinux module and libselinux-utils for /usr/sbin/setenforce
 - name: Install Selinux Management
   yum: name={{ item }} state=installed
   with_items:
-    - libselinux-python
-    - libsemanage-python
+    - python3-libselinux
+    - libselinux-utils
 
 - name: set SELinux to permissive
   action: selinux policy=targeted state=permissive
