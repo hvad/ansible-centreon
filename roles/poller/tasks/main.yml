@@ -2,4 +2,6 @@
 # This playbook contains plays that will be run on Poller nodes.
 
 - name: Install Poller
-  yum: name=centreon-poller-centreon-engine state=installed
+  yum:
+    name: centreon-poller-centreon-engine
+    state: installed

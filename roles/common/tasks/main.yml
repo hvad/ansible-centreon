@@ -3,42 +3,63 @@
 
 # We need python3-libselinux for the selinux module and libselinux-utils for /usr/sbin/setenforce
 - name: Install Selinux Management
-  yum: name={{ item }} state=installed
+  yum:
+    name: {{ item }}
+    state: installed
   with_items:
     - python3-libselinux
     - libselinux-utils
 
 - name: set SELinux to permissive
-  action: selinux policy=targeted state=permissive
+  selinux:
+    policy: targeted
+    state: permissive
 
 - name: ensure SELinux is turned off
-  action: command /usr/sbin/setenforce 0
+  command: /usr/sbin/setenforce 0
 
 - name: Disable firewalld
-  action: service name=firewalld state=stopped enabled=false
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
   when:
     - ansible_os_family == "RedHat"
 
 - name: Install chrony
-  yum: name=chrony state=present
+  yum:
+    name: chrony
+    state: present
   when:
     - ansible_os_family == "RedHat"
 
 - name: Ensure that ntpd is running
-  service: name=chronyd state=started enabled=yes
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
   when:
     - ansible_os_family == "RedHat"
 
 - name: Install snmpd
-  yum: name=net-snmp state=present
+  yum:
+    name: net-snmp
+    state: present
 
 - name: Set snmpd configuration
-  template: src=snmpd.conf.j2 dest=/etc/snmp/snmpd.conf owner=root group=root
+  template:
+    src: snmpd.conf.j2
+    dest: /etc/snmp/snmpd.conf
+    owner: root
+    group: root
   notify:
     - restart snmpd
 
 - name: Ensure that snmpd is running
-  service: name=snmpd state=started enabled=yes
+  service:
+    name: snmpd
+    state: started
+    enabled: yes
 
 # - name: Enable CodeReady Builder repository on RHEL
 # action: command subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms
@@ -46,18 +67,23 @@
 # - ansible_distribution == "RedHat"
 
 - name: Enable PowerTools repository on CentOS
-  action: command dnf config-manager --set-enabled powertools
+  command: dnf config-manager --set-enabled powertools
   when:
     - ansible_distribution == "CentOS"
 
 - name: Enable EPEL repository on RHEL/CentOS
-  yum: name={{ item }} state=installed
+  yum:
+    name: {{ item }}
+    state: installed
   with_items:
     - epel-release
   when:
     - ansible_os_family == "RedHat"
 
 - name: Set Centreon repository
-  yum: name="http://yum.centreon.com/standard/{{ centreon_major_version }}/el{{ ansible_distribution_major_version }}/stable/noarch/RPMS/centreon-release-{{ centreon_major_version }}-2.el{{ ansible_distribution_major_version }}.noarch.rpm" state=installed disable_gpg_check=yes
+  yum:
+    name: "http://yum.centreon.com/standard/{{ centreon_major_version }}/el{{ ansible_distribution_major_version }}/stable/noarch/RPMS/centreon-release-{{ centreon_major_version }}-2.el{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: installed
+    disable_gpg_check: yes
   when:
     - ansible_os_family == "RedHat"
