@@ -4,11 +4,10 @@
 # We need python3-libselinux for the selinux module and libselinux-utils for /usr/sbin/setenforce
 - name: Install Selinux Management
   yum:
-    name: {{ item }}
+    name:
+      - python3-libselinux
+      - libselinux-utils
     state: installed
-  with_items:
-    - python3-libselinux
-    - libselinux-utils
 
 - name: set SELinux to permissive
   selinux:
@@ -73,10 +72,8 @@
 
 - name: Enable EPEL repository on RHEL/CentOS
   yum:
-    name: {{ item }}
+    name: epel-release
     state: installed
-  with_items:
-    - epel-release
   when:
     - ansible_os_family == "RedHat"
 
